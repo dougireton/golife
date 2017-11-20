@@ -3,16 +3,17 @@ package main
 import "fmt"
 
 const (
-	height = 15
-	width  = 80
+	x = 80
+	y = 15
 )
 
 type Universe [][]bool
 
 func NewUniverse() Universe {
-	u := make([][]bool, height)
-	for row := 0; row < height; row++ {
-		u[row] = make([]bool, 80)
+	u := make([][]bool, y)
+	cells := make([]bool, x*y)
+	for row := range u {
+		u[row], cells = cells[:x:x], cells[x:]
 	}
 	return u
 }
