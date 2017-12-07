@@ -9,6 +9,12 @@ import (
 
 type Universe [][]bool
 
+// Coordinate is an x, y point in the Universe
+type Coordinate struct {
+	x int
+	y int
+}
+
 func init() {
 	rand.Seed(time.Now().UnixNano())
 }
@@ -91,11 +97,79 @@ func (u Universe) Alive(x, y int) bool {
 }
 
 // Neighbors returns the number of live neighbors for a given cell, from zero to eight.
+//   +---------------+
+// 0 | a | T | F | F |
+// 1 | T | F | F | b |
+// 2 | F | T | F | F |
+// 3 | T | F | F | F |
+//   +---------------+
+//     0   1   2   3
 func (u Universe) Neighbors(x, y int) int {
-	return 0
+
+	var alive int
+	neighbors := [8]Coordinate{
+		{-1, 0},  // N  y-1, x+0
+		{-1, 1},  // NE y-1, x+1
+		{0, 1},   // E  y+0, x+1
+		{1, 1},   // SE y+1, x+1
+		{1, 0},   // S  y+1, x+0
+		{1, -1},  // SW y+1, x-1
+		{0, -1},  // W  y+0, x-1
+		{-1, -1}, // NW y-1, x-1
+	}
+
+	for _, n := range neighbors {
+		a := x + n.x
+		b := y + n.y
+
+		if u.Alive(a, b) {
+			alive++
+		}
+	}
+	return alive
+}
+
+// Next returns true iff the cell should live on to the next generation
+//  A live cell with fewer than two live neighbors dies.
+//  A live cell with two or three live neighbors lives on to the next generation.
+//  A live cell with more than three live neighbors dies.
+//  A dead cell with exactly three live neighbors becomes a live cell.
+func (u Universe) Next(x, y int) bool {
+	alive := u.Alive(x, y)
+	neighbors := u.Neighbors(x, y)
+
+	if alive && (neighbors < 2) {
+		return false
+	} else if alive && (neighbors > 3) {
+		return false
+	} else if neighbors == 3 {
+		return true
+	}
+
+	return alive
+}
+
+// Step through each cell in the universe and determine what its Next state should be.
+func Step(a, b Universe) {
+	for y, row := range a {
+		for x := range row {
+			b[y][x] = a.Next(x, y)
+		}
+	}
 }
 
 func main() {
-	foo := NewUniverse(80, 15)
-	fmt.Print(foo.Show())
+	a := NewUniverse(80, 15)
+	b := NewUniverse(80, 15)
+
+	// Seed the universe with 25% alive cells
+	a.Seed(0.25)
+
+	for {
+		fmt.Print("\033[H\033[2J") // clear the screen
+		fmt.Print(a.Show())
+		time.Sleep(time.Second)
+		Step(a, b)
+		a, b = b, a
+	}
 }
