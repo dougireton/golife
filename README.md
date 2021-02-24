@@ -14,6 +14,27 @@ A dead cell with exactly three live neighbors becomes a live cell.
 
 Nathan Youngman. Get Programming with Go MEAP V11 (Kindle Locations 3812-3819). Manning Publications Co.. Kindle Edition.
 
+## Example Output
+
+Conway's Game of Life produces many interesting patterns as the simulation goes on. Here's a snapshot of some of these patterns.
+
+```sh
+ ***                         *  *            *                                  
+   *    ** *                 **                                                 
+*     **    *   **           ***       *    *                                   
+      ****   * * *         * * *      * ******                                  
+ ***  **    *   *         ***  *   **        *                                  
+           *             **  *     ***** * *                       **           
+        **                *** *               *                   *  *          
+       *  *                ***          **                         **           
+       * *                  *          *  *   *         **                      
+        *     **                      ***               **                      
+             *  *                     **      *                         *       
+    *         **   **                ***    *                          * *      
+   * *             **                ***      *                        * *      
+                             *  *    **                                 *    
+```
+
 ## How to Run
 
 You'll need Go installed. Run the Game of Life simulation in your terminal with this command:
