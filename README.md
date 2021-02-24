@@ -19,7 +19,7 @@ Nathan Youngman. Get Programming with Go MEAP V11 (Kindle Locations 3812-3819). 
 You'll need Go installed. Run the Game of Life simulation in your terminal with this command:
 
 ```sh
-go run
+go run .
 ```
 
 ## Unit Tests
